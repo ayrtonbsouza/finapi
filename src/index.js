@@ -75,6 +75,18 @@ app.post('/withdraw', verifyIfExistsAccountCPF, (request, response) => {
   return response.status(201).send();
 })
 
+app.get('/statement/date', verifyIfExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+  const { date } = request.query;
+  const dateFormat = new Date(date + ' 00:00')
+  const statement = customer.statement.filter(
+    (statement) =>
+      statement.created_at.toDateString() ===
+      new Date(dateFormat).toDateString()
+  );
+  return response.status(200).json(statement);
+})
+
 app.listen(3333, () => {
   console.log('🚀 Server started and running in: http://localhost:3333/')
 })
